@@ -1,4 +1,4 @@
-package cn.ethan.ethanasync.test2;
+package cn.ethan.ethanasync.test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
