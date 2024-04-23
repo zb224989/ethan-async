@@ -6,27 +6,23 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class IndexWebMap {
     public static void main(String[] args) {
         List<Supplier<ITask>> allTask = getSuppliers();
 
-        CompletableFuture[] cfs = new CompletableFuture[allTask.size()];
-        for (int i = 0; i < allTask.size(); i++) {
-            cfs[i] = CompletableFuture.supplyAsync(allTask.get(i));
-        }
-
-        CompletableFuture<Void> allOfFuture = CompletableFuture.allOf(cfs);
+        List<CompletableFuture<ITask>> cfs = new ArrayList<>(allTask.size());
+        allTask.forEach(task -> cfs.add(CompletableFuture.supplyAsync(task)));
+        CompletableFuture<Void> allOfFuture = CompletableFuture.allOf(cfs.toArray(new CompletableFuture[allTask.size()]));
         CompletableFuture<Map<String, Object>> objectCompletableFuture = allOfFuture.thenApply(v -> {
             Map<String, Object> taskResults = new HashMap<>();
             for (CompletableFuture<ITask> cf : cfs) {
                 try {
                     ITask iTask = cf.get();
                     taskResults.put(iTask.getKey(), iTask.getValue());
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                } catch (ExecutionException e) {
+                } catch (InterruptedException | ExecutionException e) {
                     throw new RuntimeException(e);
                 }
             }
@@ -60,7 +56,7 @@ public class IndexWebMap {
         stringTask.setKey("aaa");
         stringTask.setValue("ddd");
         try {
-            Thread.sleep(3000);
+            Thread.sleep(4000);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -72,7 +68,7 @@ public class IndexWebMap {
         stringTask.setKey("aaa");
         stringTask.setValue("ddd");
         try {
-            Thread.sleep(3000);
+            Thread.sleep(5000);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }

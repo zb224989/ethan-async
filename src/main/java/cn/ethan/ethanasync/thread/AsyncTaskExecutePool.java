@@ -40,7 +40,7 @@ public class AsyncTaskExecutePool implements AsyncConfigurer {
                 60,
                 TimeUnit.SECONDS,
                 new ArrayBlockingQueue<>(50),
-//                new TheadFactoryName(),
+                new TheadFactoryName(),
                 new ThreadPoolExecutor.CallerRunsPolicy()
         );
     }
