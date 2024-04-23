@@ -10,4 +10,9 @@ public class DemoService {
         System.out.println("已进入到异步 - 线程名称："+Thread.currentThread().getName() + " be ready to read data!");
         return "已进入到异步";
     }
+
+    public String getDataTest(){
+        System.out.println("DemoServiceDemoService getDataTest");
+        return "";
+    }
 }

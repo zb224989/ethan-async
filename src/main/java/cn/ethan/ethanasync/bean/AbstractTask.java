@@ -1,4 +1,4 @@
-package cn.ethan.ethanasync.test;
+package cn.ethan.ethanasync.bean;
 
 
 import lombok.Data;
@@ -7,8 +7,4 @@ import lombok.Data;
 public abstract class AbstractTask implements ITask {
     private String key;
     private Object value;
-    @Override
-    public String getKey() {
-        return key;
-    }
 }

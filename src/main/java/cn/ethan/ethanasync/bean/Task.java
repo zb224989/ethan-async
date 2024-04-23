@@ -1,4 +1,4 @@
-package cn.ethan.ethanasync.test;
+package cn.ethan.ethanasync.bean;
 
 import lombok.Data;
 
