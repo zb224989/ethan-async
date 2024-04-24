@@ -3,12 +3,12 @@ package cn.ethan.ethanasync.bean.base;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * 大屏模块枚举
+ */
 @Getter
 public enum LargeScreenKeyEnum {
 
-    /**
-     * 大屏模块
-     */
     NURSING_LEVEL("nursingLevel", "大屏-护理等级模块"),
     CURRENT_EMP("currentEmp", "大屏-在职员工模块"),
     PORTRAIT_ELDERLY("portraitElderly", "大屏-长者画像模块"),

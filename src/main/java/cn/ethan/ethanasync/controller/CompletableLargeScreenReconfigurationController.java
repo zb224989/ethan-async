@@ -79,7 +79,7 @@ public class CompletableLargeScreenReconfigurationController {
     }
 
     /**
-     * 获取所有任务（build开头的方法）
+     * 获取所有任务（利用反射获取所有build开头的方法）
      * @param LargeScreenReq
      * @return
      */
@@ -115,6 +115,9 @@ public class CompletableLargeScreenReconfigurationController {
         return allTask;
     }
 
+    /**
+     * 构建护理等级
+     */
     public ILargeScreenParam buildNursingLevel(LargeScreenReq largeScreenReq) {
         demoService.getDataTest();
         ArrayList<Object> list = new ArrayList<>();
@@ -128,6 +131,10 @@ public class CompletableLargeScreenReconfigurationController {
         sleep(500);
         return stringTask;
     }
+
+    /**
+     * 构建在职员工
+     */
     public ILargeScreenParam buildCurrentEmp(LargeScreenReq largeScreenReq) {
         LargeScreenParam stringTask = new LargeScreenParam();
         stringTask.setKey(LargeScreenKeyEnum.CURRENT_EMP.getCode());
@@ -135,6 +142,9 @@ public class CompletableLargeScreenReconfigurationController {
         sleep(500);
         return stringTask;
     }
+    /**
+     * 构建长者画像
+     */
     public ILargeScreenParam buildPortraitElderly(LargeScreenReq largeScreenReq) {
         LargeScreenParam stringTask = new LargeScreenParam();
         stringTask.setKey(LargeScreenKeyEnum.PORTRAIT_ELDERLY.getCode());
@@ -142,6 +152,9 @@ public class CompletableLargeScreenReconfigurationController {
         sleep(500);
         return stringTask;
     }
+    /**
+     * 构建健康分析
+     */
     public ILargeScreenParam buildHealthxAnalysis(LargeScreenReq largeScreenReq) {
         LargeScreenParam stringTask = new LargeScreenParam();
         stringTask.setKey(LargeScreenKeyEnum.HEALTHX_ANALYSIS.getCode());
