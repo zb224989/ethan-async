@@ -31,9 +31,7 @@ public class TheadFactoryName implements ThreadFactory {
     @Override
     public Thread newThread(Runnable r) {
         //此时线程的名字 就是 namePrefix + -thread- + 这个线程池中第几个执行的线程
-        Thread t = new Thread(group, r,
-                namePrefix + "-thread-" + threadNumber.getAndIncrement(),
-                0);
+        Thread t = new Thread(group, r, namePrefix + "-thread-" + threadNumber.getAndIncrement(), 0);
         if (t.isDaemon()) {
             t.setDaemon(false);
         }

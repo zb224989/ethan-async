@@ -46,6 +46,9 @@ public class AsyncTaskExecutePool implements AsyncConfigurer {
     }
 
 
+    /**
+     * @Async注解会使用这个线程池
+     */
     @Override
     public Executor getAsyncExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();

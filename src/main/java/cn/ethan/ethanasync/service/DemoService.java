@@ -4,15 +4,17 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Service
-public class DemoService {
-    @Async
-    public String asyncTest() {
-        System.out.println("已进入到异步 - 线程名称："+Thread.currentThread().getName() + " be ready to read data!");
-        return "已进入到异步";
-    }
+public interface DemoService {
 
-    public String getDataTest(){
-        System.out.println("DemoServiceDemoService getDataTest");
-        return "";
-    }
+    /**
+     * @Async 异步方法
+     **/
+    String asyncTest();
+
+
+    /**
+     * 普通业务方法
+     **/
+    String getDataTest();
+
 }

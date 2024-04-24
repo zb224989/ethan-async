@@ -21,6 +21,12 @@ public class CompletableFutureCustomThreadPoolController {
     @Resource
     private ThreadPoolExecutor customThreadPoolExecutor;
 
+    /**
+     * CompletableFuture使用自定义线程池
+     *
+     * @throws ExecutionException /
+     * @throws InterruptedException /
+     */
     @GetMapping(value = "/allOfCustomThreadPool")
     public void allOf() throws ExecutionException, InterruptedException {
         CompletableFuture<String> cf1 = CompletableFuture.supplyAsync(() -> {

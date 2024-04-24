@@ -3,11 +3,8 @@ package cn.ethan.ethanasync.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.annotation.Resource;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * CompletableFuture API
@@ -16,11 +13,7 @@ import java.util.concurrent.ThreadPoolExecutor;
  **/
 @Slf4j
 @RestController
-public class CompletableFutureDemoController {
-
-    @Resource
-    private ThreadPoolExecutor customThreadPoolExecutor;
-
+public class CompletableFutureApiDemoController {
 
     /**
      * == thenRun()

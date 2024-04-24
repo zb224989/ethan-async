@@ -1,24 +1,17 @@
 package cn.ethan.ethanasync.controller;
 
-
-import cn.ethan.ethanasync.bean.AbstractTask;
-import cn.ethan.ethanasync.bean.ITask;
-import cn.ethan.ethanasync.bean.Task;
+import cn.ethan.ethanasync.bean.LargeScreenReq;
+import cn.ethan.ethanasync.bean.LargeScreenResp;
 import cn.ethan.ethanasync.service.DemoService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.ApplicationContext;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ThreadPoolExecutor;
-import java.util.function.Supplier;
 
 /**
  * 使用CompletableFuture优化大屏接口
@@ -35,93 +28,68 @@ public class CompletableLargeScreenController {
     @Resource
     private DemoService demoService;
 
-    @Resource
-    ApplicationContext applicationContext;
-
 
     @GetMapping(value = "/getAllData")
-    public Object getAllData() {
-        List<Supplier<ITask>> allTask = getAllTask();
-        if (CollectionUtils.isEmpty(allTask)) {
-            return "null";
-        }
+    public LargeScreenResp getAllData(LargeScreenReq largeScreenReq) {
+        // 获取护理等级数据
+        CompletableFuture<Map<String, Object>> future1 = CompletableFuture.supplyAsync(() -> this.buildNursingLevel(largeScreenReq), customThreadPoolExecutor);
+        // 获取在职员工数据
+        CompletableFuture<Map<String, Object>> future2 = CompletableFuture.supplyAsync(() -> this.buildCurrentEmp(largeScreenReq), customThreadPoolExecutor);
+        // 获取长者画像数据
+        CompletableFuture<Map<String, Object>> future3 = CompletableFuture.supplyAsync(() -> this.buildPortraitElderly(largeScreenReq), customThreadPoolExecutor);
+        // 获取健康分析数据
+        CompletableFuture<Map<String, Object>> future4 = CompletableFuture.supplyAsync(() -> this.buildHealthxAnalysis(largeScreenReq), customThreadPoolExecutor);
 
-        List<CompletableFuture<ITask>> cfs = new ArrayList<>(allTask.size());
-        allTask.forEach(task -> cfs.add(CompletableFuture.supplyAsync(task)));
-        CompletableFuture<Void> allOfFuture = CompletableFuture.allOf(cfs.toArray(new CompletableFuture[allTask.size()]));
-        CompletableFuture<Map<String, Object>> objectCompletableFuture = allOfFuture.thenApply(v -> {
-            Map<String, Object> taskResults = new HashMap<>(allTask.size());
-            cfs.forEach(future -> {
-                ITask iTask;
-                try {
-                    iTask = future.get();
-                } catch (InterruptedException | ExecutionException e) {
-                    throw new RuntimeException(e);
-                }
-                taskResults.put(iTask.getKey(), iTask.getValue());
-            });
-            return taskResults;
-        });
-        System.out.println("等待结果");
-        Map<String, Object> join = objectCompletableFuture.join();
-        System.out.println(join);
-        return join;
-    }
-
-    public List<Supplier<ITask>> getAllTask() {
-
-        CompletableLargeScreenController bean = applicationContext.getBean(this.getClass());
-
-        Class<? extends CompletableLargeScreenController> studentClass = bean.getClass();
-
-        //获取公共方法
-        Method[] methods = studentClass.getMethods();
-        ArrayList<Method> allMethods = new ArrayList<>();
-        for (Method method : methods) {
-            if (method.getName().startsWith("build")) {
-                allMethods.add(method);
+        CompletableFuture<Void> allOfFuture = CompletableFuture.allOf(future1, future2, future3, future4);
+        CompletableFuture<LargeScreenResp> resultFuture = allOfFuture.thenApply(v -> {
+            LargeScreenResp largeScreenDTO = new LargeScreenResp();
+            try {
+                largeScreenDTO.setNursingLevel(future1.get());
+                largeScreenDTO.setCurrentEmp(future2.get());
+                largeScreenDTO.setPortraitElderly(future3.get());
+                largeScreenDTO.setHealthxAnalysis(future4.get());
+                return largeScreenDTO;
+            } catch (Exception e) {
+                log.error("[Error] assemble largeScreenDTO data error: {}", e);
+                throw new RuntimeException(e);
             }
-        }
-
-        List<Supplier<ITask>> allTask = new ArrayList<>();
-        for (Method m : allMethods) {
-            allTask.add(() -> {
-                try {
-                    return (ITask) m.invoke(bean);
-                } catch (IllegalAccessException e) {
-                    throw new RuntimeException(e);
-                } catch (InvocationTargetException e) {
-                    throw new RuntimeException(e);
-                }
-            });
-        }
-        return allTask;
+        });
+        return resultFuture.join();
     }
 
-    public ITask buildBanners() {
-        Task stringTask = new Task();
-        stringTask.setKey("bbb");
-        stringTask.setValue("vvv");
-        System.out.println("buildBannersbuildBannersbuildBannersbuildBanners");
+    public Map<String, Object> buildNursingLevel(LargeScreenReq largeScreenReq) {
         demoService.getDataTest();
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        return stringTask;
+        sleep(500);
+        return new HashMap<>();
     }
 
-    public ITask buildBanners2() {
-        Task stringTask = new Task();
-        stringTask.setKey("olderNumber");
-        stringTask.setValue("73");
+    public Map<String, Object> buildCurrentEmp(LargeScreenReq largeScreenReq) {
+        demoService.getDataTest();
+        sleep(500);
+        return new HashMap<>();
+    }
+
+
+    public Map<String, Object> buildPortraitElderly(LargeScreenReq largeScreenReq) {
+        demoService.getDataTest();
+        sleep(500);
+        return new HashMap<>();
+    }
+
+    public Map<String, Object> buildHealthxAnalysis(LargeScreenReq largeScreenReq) {
+        demoService.getDataTest();
+        sleep(500);
+        return new HashMap<>();
+    }
+
+
+
+    private static void sleep(long millis) {
         try {
-            Thread.sleep(300);
+            Thread.sleep(millis);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        return stringTask;
     }
 
 }

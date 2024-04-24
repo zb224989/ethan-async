@@ -6,6 +6,14 @@ import java.util.concurrent.CompletableFuture;
  * 异常对比
  */
 public class CompletableFutureExceptionHandler {
+
+    /**
+     * handle
+     *
+     * @param a /
+     * @param b /
+     * @return java.util.concurrent.CompletableFuture
+     **/
     public static CompletableFuture handle(int a, int b) {
         return CompletableFuture.supplyAsync(() -> a / b)
                 .handle((result, ex) -> {
@@ -17,6 +25,14 @@ public class CompletableFutureExceptionHandler {
                     }
                 });
     }
+
+    /**
+     * whenComplete
+     *
+     * @param a /
+     * @param b /
+     * @return java.util.concurrent.CompletableFuture
+     **/
     public static CompletableFuture whenComplete(int a, int b) {
         return CompletableFuture.supplyAsync(() -> a / b)
                 .whenComplete((result, ex) -> {
@@ -25,6 +41,12 @@ public class CompletableFutureExceptionHandler {
                     }
                 });
     }
+
+    /**
+     * main
+     *
+     * @param args /
+     **/
     public static void main(String[] args) {
         try {
             System.out.println("success: " + handle(10, 5).get());
