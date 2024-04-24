@@ -1,13 +1,15 @@
 package cn.ethan.ethanasync.bean.base;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
+@AllArgsConstructor
 @Data
-public class LargeScreenParam extends AbstractLargeScreenParam {
-    public LargeScreenParam() {
-    }
+public class LargeScreenParam implements ILargeScreenParam {
 
-    public LargeScreenParam(String key, Object value) {
-        super(key, value);
-    }
+    private String key;
+    private Object value;
+
 }

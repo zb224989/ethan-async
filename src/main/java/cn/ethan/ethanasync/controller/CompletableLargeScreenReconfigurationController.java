@@ -1,6 +1,5 @@
 package cn.ethan.ethanasync.controller;
 
-import cn.ethan.ethanasync.bean.LargeScreenResp;
 import cn.ethan.ethanasync.bean.base.ILargeScreenParam;
 import cn.ethan.ethanasync.bean.LargeScreenReq;
 import cn.ethan.ethanasync.bean.base.LargeScreenKeyEnum;
@@ -79,11 +78,16 @@ public class CompletableLargeScreenReconfigurationController {
         return join;
     }
 
+    /**
+     * 获取所有任务（build开头的方法）
+     * @param LargeScreenReq
+     * @return
+     */
     public List<Supplier<ILargeScreenParam>> getAllTask(LargeScreenReq LargeScreenReq) {
 
         CompletableLargeScreenReconfigurationController bean = applicationContext.getBean(this.getClass());
 
-        //获取公共方法
+        // 获取公共方法
         Method[] methods = bean.getClass().getMethods();
         ArrayList<Method> allMethods = new ArrayList<>();
         for (Method method : methods) {
